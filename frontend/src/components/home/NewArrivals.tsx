@@ -4,9 +4,13 @@ import { ProductGrid } from "@/components/products/ProductGrid";
 import { api } from "@/lib/api";
 
 export async function NewArrivals() {
-  // Taking top 8 products for the homepage grid
-  const res = await api.products.list({ limit: 8, sort: 'newest' });
-  const recentProducts = res.data.slice(0, 8);
+  let recentProducts: any[] = [];
+  try {
+    const res = await api.products.list({ limit: 8, sort: 'newest' });
+    recentProducts = res.data?.slice(0, 8) || [];
+  } catch (error) {
+    console.error("Failed to fetch new arrivals:", error);
+  }
 
   return (
     <section className="w-full py-16 md:py-24 bg-white">
