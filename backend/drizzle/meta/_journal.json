@@ -1,0 +1,41 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1790837542315,
+      "tag": "0000_curious_moondragon",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1790838381912,
+      "tag": "0001_conscious_shinko_yamashiro",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1790840952670,
+      "tag": "0002_breezy_amphibian",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1790841143618,
+      "tag": "0003_cute_fallen_one",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1790841464047,
+      "tag": "0004_curly_toro",
+      "breakpoints": true
+    }
+  ]
+}
