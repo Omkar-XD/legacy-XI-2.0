@@ -64,7 +64,7 @@ export function RegisterForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       {error && (
-        <div className="bg-red-50 text-red-600 p-4 font-sans text-sm border border-red-200">
+        <div className="bg-red-50 text-red-600 p-4 font-sans text-sm border border-red-200 break-words whitespace-pre-wrap">
           {error}
         </div>
       )}
