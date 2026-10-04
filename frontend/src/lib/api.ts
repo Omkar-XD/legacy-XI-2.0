@@ -95,7 +95,7 @@ export const api = {
         
         const id = slugOrId;
 
-        const res = await apiClient.get<any>(`/api/products/${id}`);
+        const res = await apiClient.get<any>(`/api/products/${encodeURIComponent(id)}`);
         
         // Map backend format to frontend `Product`
         const p = res.product;
