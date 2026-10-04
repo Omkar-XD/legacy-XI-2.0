@@ -48,7 +48,7 @@ module.exports = async function (fastify, opts) {
       
       return reply.status(201).send({ product: newProduct });
     } catch (error) {
-      if (error.code === '23505') {
+      if (error.code === '23505' || (error.cause && error.cause.code === '23505')) {
         return reply.status(400).send({ error: { message: 'A product with this slug already exists.' } });
       }
       throw error;
@@ -130,35 +130,42 @@ module.exports = async function (fastify, opts) {
       return reply.status(400).send({ error: { message: 'Validation error', details: parsed.error.format() } });
     }
 
-    const { category_ids, ...updateData } = parsed.data;
+    try {
+      const { category_ids, ...updateData } = parsed.data;
 
-    let updatedProduct = null;
-    if (Object.keys(updateData).length > 0) {
-      const [res] = await db.update(products).set({
-        ...updateData,
-        updated_at: new Date()
-      }).where(eq(products.id, id)).returning();
-      updatedProduct = res;
-    } else {
-      const [res] = await db.select().from(products).where(eq(products.id, id)).limit(1);
-      updatedProduct = res;
+      let updatedProduct = null;
+      if (Object.keys(updateData).length > 0) {
+        const [res] = await db.update(products).set({
+          ...updateData,
+          updated_at: new Date()
+        }).where(eq(products.id, id)).returning();
+        updatedProduct = res;
+      } else {
+        const [res] = await db.select().from(products).where(eq(products.id, id)).limit(1);
+        updatedProduct = res;
+      }
+
+      if (!updatedProduct) return reply.status(404).send({ error: { message: 'Product not found' } });
+
+      if (category_ids && category_ids.length > 0) {
+        const { product_categories } = require('../../db/schema');
+        // Delete old categories
+        await db.delete(product_categories).where(eq(product_categories.product_id, id));
+        // Insert new ones
+        const categoryInserts = category_ids.map(cid => ({
+          product_id: id,
+          category_id: cid
+        }));
+        await db.insert(product_categories).values(categoryInserts);
+      }
+
+      return { product: updatedProduct };
+    } catch (error) {
+      if (error.code === '23505' || (error.cause && error.cause.code === '23505')) {
+        return reply.status(400).send({ error: { message: 'A product with this slug already exists.' } });
+      }
+      throw error;
     }
-
-    if (!updatedProduct) return reply.status(404).send({ error: { message: 'Product not found' } });
-
-    if (category_ids && category_ids.length > 0) {
-      const { product_categories } = require('../../db/schema');
-      // Delete old categories
-      await db.delete(product_categories).where(eq(product_categories.product_id, id));
-      // Insert new ones
-      const categoryInserts = category_ids.map(cid => ({
-        product_id: id,
-        category_id: cid
-      }));
-      await db.insert(product_categories).values(categoryInserts);
-    }
-
-    return { product: updatedProduct };
   });
 
   fastify.delete('/products/:id', async (request, reply) => {
