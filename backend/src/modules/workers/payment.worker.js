@@ -1,7 +1,7 @@
 const { Worker } = require('bullmq');
 const { connection } = require('./queues');
 const { db } = require('../../db');
-const { payments, orders, reservations, inventory } = require('../../db/schema');
+const { payments, orders, reservations, inventory, processed_webhook_events } = require('../../db/schema');
 const { eq, sql } = require('drizzle-orm');
 const { transitionOrderStatus } = require('../orders/orders.service');
 
@@ -109,12 +109,26 @@ const paymentWorker = new Worker('payment-webhooks', async (job) => {
         console.log(`[PaymentWorker] Order state machine warning: ${err.message}`);
       }
     }
-  });
+  }); // end transaction
+
+  // Update webhook event status to processed
+  await db.update(processed_webhook_events)
+    .set({ status: 'processed', updated_at: new Date() })
+    .where(eq(processed_webhook_events.event_id, eventId));
 
 }, { connection, concurrency: 5 });
 
-paymentWorker.on('failed', (job, err) => {
+paymentWorker.on('failed', async (job, err) => {
   console.error(`[PaymentWorker] Job ${job.id} failed:`, err);
+  if (job && job.data && job.data.eventId) {
+    try {
+      await db.update(processed_webhook_events)
+        .set({ status: 'failed', error: err.message, updated_at: new Date() })
+        .where(eq(processed_webhook_events.event_id, job.data.eventId));
+    } catch (dbErr) {
+      console.error(`[PaymentWorker] DB update failed:`, dbErr);
+    }
+  }
 });
 
 paymentWorker.on('completed', (job) => {

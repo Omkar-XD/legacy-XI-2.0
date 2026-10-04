@@ -1,6 +1,6 @@
 const { db } = require('../../db');
 const { processed_webhook_events } = require('../../db/schema');
-const { eq } = require('drizzle-orm');
+const { eq, and } = require('drizzle-orm');
 const crypto = require('crypto');
 const env = require('../../config/env');
 const { stripe } = require('./stripe.service');
@@ -39,19 +39,27 @@ module.exports = async function (fastify, opts) {
 
     const event = request.body;
     const eventId = request.headers['x-razorpay-event-id'] || event.id; // razorpay sends header sometimes, else in body
-    const eventType = event.event;
-
-    // Idempotency check
-    const [existing] = await db.select().from(processed_webhook_events).where(eq(processed_webhook_events.event_id, eventId));
-    if (existing) {
-      return reply.send({ received: true, message: 'Already processed' });
-    }
-
-    // Insert idempotency record
-    await db.insert(processed_webhook_events).values({
+    
+    // Insert or update securely to avoid concurrent unique constraint violations
+    let [record] = await db.insert(processed_webhook_events).values({
       provider: 'razorpay',
-      event_id: eventId
-    });
+      event_id: eventId,
+      status: 'pending',
+      payload: event,
+      updated_at: new Date()
+    }).onConflictDoNothing().returning();
+
+    if (!record) {
+      const [existing] = await db.select().from(processed_webhook_events).where(and(eq(processed_webhook_events.event_id, eventId), eq(processed_webhook_events.provider, 'razorpay')));
+      if (existing && existing.status === 'processed') {
+        return reply.send({ received: true, message: 'Already processed' });
+      }
+      await db.update(processed_webhook_events).set({
+        status: 'pending',
+        payload: event,
+        updated_at: new Date()
+      }).where(and(eq(processed_webhook_events.event_id, eventId), eq(processed_webhook_events.provider, 'razorpay')));
+    }
 
     // Enqueue
     await paymentQueue.add('process-razorpay-webhook', { provider: 'razorpay', eventId, payload: event }, { jobId: eventId });
@@ -72,19 +80,26 @@ module.exports = async function (fastify, opts) {
     }
 
     const eventId = event.id;
-    const eventType = event.type;
 
-    // Idempotency check
-    const [existing] = await db.select().from(processed_webhook_events).where(eq(processed_webhook_events.event_id, eventId));
-    if (existing) {
-      return reply.send({ received: true, message: 'Already processed' });
-    }
-
-    // Insert idempotency record
-    await db.insert(processed_webhook_events).values({
+    let [record] = await db.insert(processed_webhook_events).values({
       provider: 'stripe',
-      event_id: eventId
-    });
+      event_id: eventId,
+      status: 'pending',
+      payload: event,
+      updated_at: new Date()
+    }).onConflictDoNothing().returning();
+
+    if (!record) {
+      const [existing] = await db.select().from(processed_webhook_events).where(and(eq(processed_webhook_events.event_id, eventId), eq(processed_webhook_events.provider, 'stripe')));
+      if (existing && existing.status === 'processed') {
+        return reply.send({ received: true, message: 'Already processed' });
+      }
+      await db.update(processed_webhook_events).set({
+        status: 'pending',
+        payload: event,
+        updated_at: new Date()
+      }).where(and(eq(processed_webhook_events.event_id, eventId), eq(processed_webhook_events.provider, 'stripe')));
+    }
 
     // Enqueue
     await paymentQueue.add('process-stripe-webhook', { provider: 'stripe', eventId, payload: event }, { jobId: eventId });

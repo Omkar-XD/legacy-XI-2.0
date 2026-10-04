@@ -191,7 +191,11 @@ const processed_webhook_events = pgTable('processed_webhook_events', {
   id: uuid('id').defaultRandom().primaryKey(),
   provider: varchar('provider', { length: 50 }).notNull(),
   event_id: varchar('event_id', { length: 255 }).notNull(),
+  status: varchar('status', { length: 50 }).notNull().default('processed'),
+  payload: jsonb('payload'),
+  error: text('error'),
   created_at: timestamp('created_at').defaultNow().notNull(),
+  updated_at: timestamp('updated_at').defaultNow().notNull(),
 }, (table) => ({
   uniqueEvent: unique('unique_provider_event').on(table.provider, table.event_id)
 }));
