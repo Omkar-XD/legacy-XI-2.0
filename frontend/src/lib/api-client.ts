@@ -26,6 +26,7 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
     ...options,
     headers,
     credentials: 'include', // Important for HttpOnly JWT cookies
+    cache: 'no-store', // Disable Next.js aggressive caching globally
   };
 
   try {
