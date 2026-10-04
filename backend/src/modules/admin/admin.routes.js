@@ -164,7 +164,8 @@ module.exports = async function (fastify, opts) {
       if (error.code === '23505' || (error.cause && error.cause.code === '23505')) {
         return reply.status(400).send({ error: { message: 'A product with this slug already exists.' } });
       }
-      throw error;
+      fastify.log.error(error);
+      return reply.status(500).send({ error: { message: 'Failed to update product' } });
     }
   });
 
@@ -204,7 +205,8 @@ module.exports = async function (fastify, opts) {
       if (error.code === '23505' || (error.cause && error.cause.code === '23505')) {
         return reply.status(400).send({ error: { message: 'A variant with this SKU already exists.' } });
       }
-      throw error;
+      fastify.log.error(error);
+      return reply.status(500).send({ error: { message: 'Failed to add variant' } });
     }
   });
 
@@ -244,7 +246,8 @@ module.exports = async function (fastify, opts) {
       if (error.code === '23505' || (error.cause && error.cause.code === '23505')) {
         return reply.status(400).send({ error: { message: 'A variant with this SKU already exists.' } });
       }
-      throw error;
+      fastify.log.error(error);
+      return reply.status(500).send({ error: { message: 'Failed to update variant' } });
     }
   });
 
