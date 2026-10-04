@@ -133,13 +133,7 @@ module.exports = async function (fastify, opts) {
       });
 
       // 10. Enqueue delayed jobs to BullMQ (Outside the DB Transaction to prevent I/O blocking)
-      const { reservationQueue } = require('../workers/queues');
-      for (const resId of orderData.createdReservations) {
-        await reservationQueue.add('expire-reservation', { reservationId: resId }, {
-          jobId: `expire-res-${resId}`, // Idempotency protection
-          delay: 15 * 60 * 1000 // 15 mins delay
-        });
-      }
+      // (Removed: We now rely entirely on the PostgreSQL-based reservation sweeper)
 
       return reply.send({
         message: 'Checkout successful, ready for payment',

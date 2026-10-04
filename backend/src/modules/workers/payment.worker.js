@@ -116,7 +116,7 @@ const paymentWorker = new Worker('payment-webhooks', async (job) => {
     .set({ status: 'processed', updated_at: new Date() })
     .where(eq(processed_webhook_events.event_id, eventId));
 
-}, { connection, concurrency: 5 });
+}, { connection, concurrency: 5, stalledInterval: 300000 });
 
 paymentWorker.on('failed', async (job, err) => {
   console.error(`[PaymentWorker] Job ${job.id} failed:`, err);

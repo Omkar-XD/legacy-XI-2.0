@@ -52,8 +52,6 @@ function buildApp(opts = {}) {
     try {
       // Check Postgres
       await queryClient`SELECT 1`;
-      // Check Redis
-      await redis.ping();
 
       return { status: 'ready' };
     } catch (err) {

@@ -15,13 +15,9 @@ const defaultJobOptions = {
   removeOnFail: false,
 };
 
-const reservationQueue = new Queue('reservation-expiration', { connection, defaultJobOptions });
 const paymentQueue = new Queue('payment-webhooks', { connection, defaultJobOptions });
-const emailQueue = new Queue('email-notifications', { connection, defaultJobOptions });
 
 module.exports = {
   connection,
-  reservationQueue,
-  paymentQueue,
-  emailQueue
+  paymentQueue
 };
