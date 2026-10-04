@@ -135,4 +135,8 @@ paymentWorker.on('completed', (job) => {
   console.log(`[PaymentWorker] Job ${job.id} completed successfully.`);
 });
 
+paymentWorker.on('error', (err) => {
+  console.error('[PaymentWorker] Error:', err.message);
+});
+
 module.exports = paymentWorker;

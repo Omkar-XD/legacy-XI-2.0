@@ -17,6 +17,10 @@ const defaultJobOptions = {
 
 const paymentQueue = new Queue('payment-webhooks', { connection, defaultJobOptions });
 
+paymentQueue.on('error', (err) => {
+  console.error('[PaymentQueue] Error:', err.message);
+});
+
 module.exports = {
   connection,
   paymentQueue
