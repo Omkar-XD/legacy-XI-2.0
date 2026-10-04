@@ -293,7 +293,7 @@ function AccountContent() {
                         <div className="space-y-4 mb-6">
                           <div>
                             <p className="text-xs font-heading font-bold uppercase tracking-widest text-black/50 mb-1">Total</p>
-                            <p className="font-sans font-bold text-black">${order.total_amount}</p>
+                            <p className="font-sans font-bold text-black">₹{(order.total_amount / 100).toFixed(2)}</p>
                           </div>
                           <div>
                             <p className="text-xs font-heading font-bold uppercase tracking-widest text-black/50 mb-1">Status</p>
