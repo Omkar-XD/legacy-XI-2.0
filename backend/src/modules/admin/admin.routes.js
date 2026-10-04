@@ -104,25 +104,6 @@ module.exports = async function (fastify, opts) {
 
     return { product, variants, media };
   });
-  
-  fastify.post('/products/:id/media-url', async (request, reply) => {
-    const { id } = request.params;
-    const { url, resource_type, alt_text, sort_order, poster_url } = request.body;
-    
-    const { product_media } = require('../../db/schema');
-    const [mediaRow] = await db.insert(product_media).values({
-      product_id: id,
-      url,
-      public_id: 'manual_' + Date.now(),
-      resource_type: resource_type || 'image',
-      alt_text,
-      sort_order: sort_order || 0,
-      poster_url
-    }).returning();
-    
-    return reply.status(201).send({ media: mediaRow });
-  });
-
   fastify.patch('/products/:id', async (request, reply) => {
     const { id } = request.params;
     const parsed = updateProductSchema.safeParse(request.body);
