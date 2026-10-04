@@ -182,23 +182,30 @@ module.exports = async function (fastify, opts) {
       return reply.status(400).send({ error: { message: 'Validation error', details: parsed.error.format() } });
     }
 
-    // Insert variant
-    const [newVariant] = await db.insert(product_variants).values({
-      product_id: id,
-      sku: parsed.data.sku,
-      size: parsed.data.size,
-      color: parsed.data.color,
-      price_override: parsed.data.price_override,
-    }).returning();
+    try {
+      // Insert variant
+      const [newVariant] = await db.insert(product_variants).values({
+        product_id: id,
+        sku: parsed.data.sku,
+        size: parsed.data.size,
+        color: parsed.data.color,
+        price_override: parsed.data.price_override,
+      }).returning();
 
-    // Insert inventory row
-    const [newInventory] = await db.insert(inventory).values({
-      variant_id: newVariant.id,
-      available_quantity: parsed.data.available_quantity,
-      reserved_quantity: 0
-    }).returning();
+      // Insert inventory row
+      const [newInventory] = await db.insert(inventory).values({
+        variant_id: newVariant.id,
+        available_quantity: parsed.data.available_quantity,
+        reserved_quantity: 0
+      }).returning();
 
-    return reply.status(201).send({ variant: newVariant, inventory: newInventory });
+      return reply.status(201).send({ variant: newVariant, inventory: newInventory });
+    } catch (error) {
+      if (error.code === '23505' || (error.cause && error.cause.code === '23505')) {
+        return reply.status(400).send({ error: { message: 'A variant with this SKU already exists.' } });
+      }
+      throw error;
+    }
   });
 
   fastify.patch('/variants/:id', async (request, reply) => {
@@ -208,30 +215,37 @@ module.exports = async function (fastify, opts) {
       return reply.status(400).send({ error: { message: 'Validation error', details: parsed.error.format() } });
     }
 
-    const updates = {};
-    if (parsed.data.sku !== undefined) updates.sku = parsed.data.sku;
-    if (parsed.data.size !== undefined) updates.size = parsed.data.size;
-    if (parsed.data.color !== undefined) updates.color = parsed.data.color;
-    if (parsed.data.price_override !== undefined) updates.price_override = parsed.data.price_override;
+    try {
+      const updates = {};
+      if (parsed.data.sku !== undefined) updates.sku = parsed.data.sku;
+      if (parsed.data.size !== undefined) updates.size = parsed.data.size;
+      if (parsed.data.color !== undefined) updates.color = parsed.data.color;
+      if (parsed.data.price_override !== undefined) updates.price_override = parsed.data.price_override;
 
-    let updatedVariant = null;
-    if (Object.keys(updates).length > 0) {
-      const [res] = await db.update(product_variants).set({
-        ...updates,
-        updated_at: new Date()
-      }).where(eq(product_variants.id, id)).returning();
-      updatedVariant = res;
-      if (!updatedVariant) return reply.status(404).send({ error: { message: 'Variant not found' } });
+      let updatedVariant = null;
+      if (Object.keys(updates).length > 0) {
+        const [res] = await db.update(product_variants).set({
+          ...updates,
+          updated_at: new Date()
+        }).where(eq(product_variants.id, id)).returning();
+        updatedVariant = res;
+        if (!updatedVariant) return reply.status(404).send({ error: { message: 'Variant not found' } });
+      }
+
+      if (parsed.data.available_quantity !== undefined) {
+        await db.update(inventory).set({
+          available_quantity: parsed.data.available_quantity,
+          updated_at: new Date()
+        }).where(eq(inventory.variant_id, id));
+      }
+
+      return { message: 'Variant updated successfully' };
+    } catch (error) {
+      if (error.code === '23505' || (error.cause && error.cause.code === '23505')) {
+        return reply.status(400).send({ error: { message: 'A variant with this SKU already exists.' } });
+      }
+      throw error;
     }
-
-    if (parsed.data.available_quantity !== undefined) {
-      await db.update(inventory).set({
-        available_quantity: parsed.data.available_quantity,
-        updated_at: new Date()
-      }).where(eq(inventory.variant_id, id));
-    }
-
-    return { message: 'Variant updated successfully' };
   });
 
   fastify.get('/customers', async (request, reply) => {
