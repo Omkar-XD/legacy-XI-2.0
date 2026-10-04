@@ -41,6 +41,35 @@ module.exports = async function (fastify, opts) {
     }
   });
 
+  fastify.post('/products/:id/media-url', async (request, reply) => {
+    const { id } = request.params;
+    const { url, resource_type, sort_order } = request.body;
+    
+    if (!url) {
+      return reply.status(400).send({ error: { message: 'URL is required' }});
+    }
+
+    const [product] = await db.select().from(products).where(eq(products.id, id)).limit(1);
+    if (!product) {
+      return reply.status(404).send({ error: { message: 'Product not found' }});
+    }
+
+    try {
+      const [mediaRow] = await db.insert(product_media).values({
+        product_id: id,
+        url: url,
+        public_id: url, // For external URLs, we use the URL as public_id
+        resource_type: resource_type || 'image',
+        sort_order: sort_order || 0,
+      }).returning();
+
+      return reply.status(201).send({ media: mediaRow });
+    } catch (err) {
+      fastify.log.error(err);
+      return reply.status(500).send({ error: { message: 'Failed to add media URL' }});
+    }
+  });
+
   fastify.patch('/media/:id', async (request, reply) => {
     const { id } = request.params;
     const { alt_text, sort_order, poster_url } = request.body;
