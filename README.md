@@ -1,4 +1,4 @@
-<img width="1917" height="1026" alt="9" src="https://github.com/user-attachments/assets/677574b4-a93c-4b6c-a62e-2f9bc9f71355" />
+
 # ⚽ Legacy XI 2.0 — Beyond CRUD
 
 ### A Full-Stack Football Jersey E-Commerce Platform
