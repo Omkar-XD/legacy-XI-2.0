@@ -3,7 +3,7 @@
 
 ### A Full-Stack Football Jersey E-Commerce Platform
 
-Legacy XI 2.0 is a full-stack e-commerce platform for football jersey enthusiasts, designed to deliver a smooth shopping experience while exploring practical backend engineering challenges.
+Legacy XI 2.0 is a full-stack football jersey e-commerce platform designed to deliver a smooth shopping experience while exploring practical backend engineering challenges.
 
 Beyond basic CRUD operations, the project focuses on inventory management, concurrent purchase handling, payment webhook idempotency, asynchronous job processing, retry strategies, and reservation expiration.
 
@@ -16,7 +16,9 @@ Beyond basic CRUD operations, the project focuses on inventory management, concu
 
 ## 📋 Table of Contents
 
+- [Overview](#-overview)
 - [Features](#-features)
+- [Screenshots](#-screenshots)
 - [Backend Engineering Concepts](#-backend-engineering-concepts)
 - [System Architecture](#-system-architecture)
 - [Technology Stack](#-technology-stack)
@@ -31,14 +33,31 @@ Beyond basic CRUD operations, the project focuses on inventory management, concu
 
 ---
 
+## 🌟 Overview
+
+Legacy XI 2.0 is built for football fans who want to explore and shop for football jerseys through a modern e-commerce experience.
+
+The project also explores backend engineering beyond basic CRUD, including asynchronous jobs, payment event processing, inventory consistency, and reservation lifecycle management.
+
+### Project Links
+
+| Resource | Link |
+|---|---|
+| Live Website | [Open Legacy XI 2.0](https://legacy-xi-2-0-psi.vercel.app/) |
+| GitHub Repository | [View Source Code](https://github.com/Omkar-XD/legacy-XI-2.0) |
+| Frontend Hosting | Vercel |
+| Backend Hosting | Render |
+
+---
+
 ## ✨ Features
 
 ### 🛍️ E-Commerce Experience
 
 - Browse football jerseys and explore product details.
-- Search, filter, and navigate the product catalog.
+- Search and navigate the product catalog.
 - Manage shopping cart items and checkout workflows.
-- Responsive shopping experience for desktop and mobile users.
+- Responsive shopping experience for desktop and mobile devices.
 
 ### 💳 Payment Integration
 
@@ -54,12 +73,12 @@ Beyond basic CRUD operations, the project focuses on inventory management, concu
 - Reservation expiration and pending-order cleanup.
 - Inventory consistency during checkout workflows.
 
-### ⚡ Asynchronous Background Processing
+### ⚡ Background Processing
 
 - Redis and BullMQ for background job processing.
-- Separation of suitable background tasks from synchronous HTTP requests.
+- Asynchronous processing for eligible tasks.
 - Configurable retries and backoff strategies.
-- Background processing for payment events and reservation maintenance.
+- Background workers for configured payment and reservation workflows.
 
 ### 🖼️ Media and Deployment
 
@@ -67,6 +86,64 @@ Beyond basic CRUD operations, the project focuses on inventory management, concu
 - PostgreSQL for relational data persistence.
 - Vercel for frontend hosting.
 - Render for backend hosting.
+
+---
+
+## 📸 Screenshots
+
+Screenshots of the actual application help visitors understand the interface, shopping experience, and major features without running the project locally.
+
+> Add your real screenshots to the `screenshots/` directory in the repository. The filenames below are examples; change the paths to match your actual image files.
+
+### 🏠 Home Page
+
+Showcase the landing page, navigation, featured football jerseys, and overall design.
+
+![Legacy XI 2.0 Home Page](screenshots/home.png)
+
+### 🛍️ Product Listing
+
+Show the product catalog, jersey cards, prices, filters, and browsing experience.
+
+![Legacy XI 2.0 Product Listing](screenshots/products.png)
+
+### 👕 Product Details
+
+Show a jersey's images, available sizes, pricing, and product information.
+
+![Legacy XI 2.0 Product Details](screenshots/product-details.png)
+
+### 🛒 Shopping Cart
+
+Show selected products, quantities, prices, and the cart summary.
+
+![Legacy XI 2.0 Shopping Cart](screenshots/cart.png)
+
+### 💳 Checkout and Payments
+
+Show the checkout interface and payment options. Do not include real payment credentials or sensitive customer information.
+
+![Legacy XI 2.0 Checkout](screenshots/checkout.png)
+
+### 📦 Order Management
+
+Show order information and order status if this functionality is available in your application.
+
+![Legacy XI 2.0 Orders](screenshots/orders.png)
+
+### 📱 Responsive Design
+
+Show the mobile layout to demonstrate how the storefront adapts to smaller screens.
+
+![Legacy XI 2.0 Mobile View](screenshots/mobile.png)
+
+### ⚙️ Backend Engineering
+
+If you have relevant screenshots, include the backend worker dashboard, queue monitoring, database records, or test results.
+
+![Legacy XI 2.0 Backend Monitoring](screenshots/backend-monitoring.png)
+
+*Only retain screenshot entries for images and features that actually exist. GitHub displays an image only when its referenced file is present at the specified path.*
 
 ---
 
@@ -88,7 +165,7 @@ The project uses persisted webhook event records and processing status tracking 
 
 **Engineering goal:** Avoid repeating the same payment-related operation when an event is delivered multiple times.
 
-> End-to-end idempotency depends on atomic event claiming, appropriate database constraints, and safe business-operation handling. Verify these guarantees with implementation review and concurrent tests.
+> End-to-end idempotency depends on atomic event claiming, appropriate database constraints, and safe business-operation handling. Verify these guarantees through implementation review and concurrent tests.
 
 ### 3. Asynchronous Job Processing
 
@@ -126,7 +203,7 @@ These workflows require careful transaction boundaries, consistent lock ordering
 
 ## 🏗️ System Architecture
 
-The platform follows a frontend-backend architecture with a relational database, external payment services, media storage, and background processing infrastructure.
+The platform connects the frontend, backend API, relational database, payment providers, media storage, and background processing infrastructure.
 
 ```mermaid
 flowchart TD
@@ -156,7 +233,7 @@ flowchart TD
 | Cloudinary | Product image and media management |
 | Vercel and Render | Frontend and backend hosting |
 
-*This diagram represents the high-level architecture. Actual request flows and deployed integrations depend on the implementation and environment configuration.*
+*This is a high-level representation. Actual request flows and deployed integrations depend on the current implementation and environment configuration.*
 
 ---
 
@@ -223,7 +300,7 @@ flowchart TD
 
 ## 📁 Project Structure
 
-The following is a representative structure. Update it to match the exact folders and files in your repository.
+The following is a representative structure. Update it to match the actual repository.
 
 ```text
 legacy-XI-2.0/
@@ -245,6 +322,16 @@ legacy-XI-2.0/
 │   │   └── ...
 │   ├── package.json
 │   └── ...
+│
+├── screenshots/
+│   ├── home.png
+│   ├── products.png
+│   ├── product-details.png
+│   ├── cart.png
+│   ├── checkout.png
+│   ├── orders.png
+│   ├── mobile.png
+│   └── backend-monitoring.png
 │
 └── README.md
 ```
