@@ -1,4 +1,4 @@
-
+<img width="1917" height="1026" alt="9" src="https://github.com/user-attachments/assets/677574b4-a93c-4b6c-a62e-2f9bc9f71355" />
 # ⚽ Legacy XI 2.0 — Beyond CRUD
 
 ### A Full-Stack Football Jersey E-Commerce Platform
@@ -93,59 +93,57 @@ The project also explores backend engineering beyond basic CRUD, including async
 
 Screenshots of the actual application help visitors understand the interface, shopping experience, and major features without running the project locally.
 
-> Add your real screenshots to the `screenshots/` directory in the repository. The filenames below are examples; change the paths to match your actual image files.
-
 ### 🏠 Home Page
 
 Showcase the landing page, navigation, featured football jerseys, and overall design.
 
-![Legacy XI 2.0 Home Page](screenshots/home.png)
+<img width="1917" height="1027" alt="1" src="https://github.com/user-attachments/assets/4d795932-35d1-471d-9028-5a08808121fe" />
 
 ### 🛍️ Product Listing
 
 Show the product catalog, jersey cards, prices, filters, and browsing experience.
 
-![Legacy XI 2.0 Product Listing](screenshots/products.png)
+<img width="1917" height="1022" alt="2" src="https://github.com/user-attachments/assets/b43049e6-1b56-4598-9bc4-62c110073c53" />
 
 ### 👕 Product Details
 
 Show a jersey's images, available sizes, pricing, and product information.
 
-![Legacy XI 2.0 Product Details](screenshots/product-details.png)
+<img width="1917" height="1027" alt="3" src="https://github.com/user-attachments/assets/fbdf8fc5-c92e-4a33-8bd8-5863cf67bef5" />
 
 ### 🛒 Shopping Cart
 
 Show selected products, quantities, prices, and the cart summary.
 
-![Legacy XI 2.0 Shopping Cart](screenshots/cart.png)
+<img width="1917" height="1030" alt="4" src="https://github.com/user-attachments/assets/b2d480fa-39ba-4576-9be9-7a40291ce87b" />
 
 ### 💳 Checkout and Payments
 
 Show the checkout interface and payment options. Do not include real payment credentials or sensitive customer information.
 
-![Legacy XI 2.0 Checkout](screenshots/checkout.png)
+<img width="1907" height="1031" alt="5" src="https://github.com/user-attachments/assets/853aafbb-9d41-4faf-b0ec-60cec56c373f" />
+<img width="1917" height="1027" alt="6" src="https://github.com/user-attachments/assets/8c4dd76b-e595-4e4d-b433-bab0046f840c" />
+<img width="1917" height="1026" alt="7" src="https://github.com/user-attachments/assets/62bc7dff-71e8-4ccc-b212-82e5e59eb044" />
 
 ### 📦 Order Management
 
 Show order information and order status if this functionality is available in your application.
 
-![Legacy XI 2.0 Orders](screenshots/orders.png)
+<img width="1912" height="970" alt="11" src="https://github.com/user-attachments/assets/76dfc0d1-8f0f-45c2-8523-6585b246dea0" />
 
 ### 📱 Responsive Design
 
 Show the mobile layout to demonstrate how the storefront adapts to smaller screens.
 
-![Legacy XI 2.0 Mobile View](screenshots/mobile.png)
+<img width="720" height="1600" alt="13" src="https://github.com/user-attachments/assets/41c9d349-612f-4c31-b6a1-c6ec09569e1b" />
 
 ### ⚙️ Backend Engineering
 
-If you have relevant screenshots, include the backend worker dashboard, queue monitoring, database records, or test results.
+<img width="1912" height="1032" alt="8" src="https://github.com/user-attachments/assets/8c5e9f77-d60a-4462-9c12-3911e6f9d1e7" />
+<img width="1917" height="1026" alt="9" src="https://github.com/user-attachments/assets/65cb5ab7-5d24-4777-9cf0-e0a2849dea98" />
+<img width="1917" height="972" alt="10" src="https://github.com/user-attachments/assets/572b735e-8161-4e78-814e-f493b85b8e18" />
+<img width="1917" height="967" alt="12" src="https://github.com/user-attachments/assets/2b2f5bfc-fc2e-47ed-b2c0-aba94872cb36" />
 
-![Legacy XI 2.0 Backend Monitoring](screenshots/backend-monitoring.png)
-
-*Only retain screenshot entries for images and features that actually exist. GitHub displays an image only when its referenced file is present at the specified path.*
-
----
 
 ## ⚙️ Backend Engineering Concepts
 
